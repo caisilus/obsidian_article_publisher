@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../lib/link_converter/link_converter"
+require_relative "../lib/obsidian_article_publisher/link_converter"
 
 RSpec.describe ObsidianArticlePublisher::LinkConverter, "#convert_links" do
   it "converts singular image link from wiki format to markdown format" do
