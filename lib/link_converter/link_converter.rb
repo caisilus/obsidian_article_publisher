@@ -1,19 +1,29 @@
 # frozen_string_literal: true
 
 module ObsidianArticlePublisher
-  module LinkConverter
+  class LinkConverter
+    attr_reader :image_names
+
     def convert_links(text, base_path: nil)
+      @image_names = []
+
       wiki_link_pattern = /!\[\[([^\]]*)\]\]/
 
       text.gsub(wiki_link_pattern) do |_match|
         link = ::Regexp.last_match(1)
 
-        link = File.join(base_path, link) unless base_path.nil?
+        @image_names << link
 
-        "![#{link}](#{link})"
+        markdown_image_link(link, base_path:)
       end
     end
 
-    module_function :convert_links
+    private
+
+    def markdown_image_link(link, base_path:)
+      link = File.join(base_path, link) unless base_path.nil?
+
+      "![#{link}](#{link})"
+    end
   end
 end
