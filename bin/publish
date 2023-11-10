@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby.exe
+# frozen_string_literal: true
 
 puts "from publish script"
-require_relative "../lib/obsidian_article_publisher.rb"
+require_relative "../lib/obsidian_article_publisher"
 
-ObsidianArticlePublisher::publish
+ObsidianArticlePublisher.publish
