@@ -2,17 +2,18 @@
 
 module ObsidianArticlePublisher
   module LinkConverter
-    def convert_link(link, base_path: nil)
-      match = /!\[\[([^\]]*)\]\]/.match(link)
-      raise ArgumentError, "Incorrect wiki link: #{link}" if match.nil?
+    def convert_links(text, base_path: nil)
+      wiki_link_pattern = /!\[\[([^\]]*)\]\]/
 
-      image_name = match[1]
+      text.gsub(wiki_link_pattern) do |_match|
+        link = ::Regexp.last_match(1)
 
-      image_name = File.join(base_path, image_name) unless base_path.nil?
+        link = File.join(base_path, link) unless base_path.nil?
 
-      "![#{image_name}](#{image_name})"
+        "![#{link}](#{link})"
+      end
     end
 
-    module_function :convert_link
+    module_function :convert_links
   end
 end
