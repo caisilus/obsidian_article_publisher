@@ -1,0 +1,12 @@
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Naming/PredicateName:
+  ForbiddenPrefixes: ["is_"]
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/*.rb'
