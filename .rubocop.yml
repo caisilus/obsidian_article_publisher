@@ -3,3 +3,6 @@ Style/Documentation:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Naming/PredicateName:
+  ForbiddenPrefixes: ["is_"]
