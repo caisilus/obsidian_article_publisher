@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby "3.2.2"
 
-gem "rspec", "~> 3.12", :groups => [:development, :test]
+gem "rspec", "~> 3.12", groups: %i[development test]
 
 group :development do
   gem "rubocop", "~> 1.57"

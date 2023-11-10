@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ObsidianArticlePublisher
   module LinkConverter
     def convert_link(link, base_path: nil)
-      match = /\!\[\[([^\]]*)\]\]/.match(link)
-      raise ArgumentError.new("Incorrect wiki link: #{link}") if match.nil?
+      match = /!\[\[([^\]]*)\]\]/.match(link)
+      raise ArgumentError, "Incorrect wiki link: #{link}" if match.nil?
 
       image_name = match[1]
 
