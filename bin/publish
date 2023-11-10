@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby.exe
+
+puts "from publish script"
+require_relative "../lib/obsidian_article_publisher.rb"
