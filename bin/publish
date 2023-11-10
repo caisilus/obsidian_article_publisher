@@ -2,3 +2,5 @@
 
 puts "from publish script"
 require_relative "../lib/obsidian_article_publisher.rb"
+
+ObsidianArticlePublisher::publish
