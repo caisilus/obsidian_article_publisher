@@ -6,3 +6,7 @@ Style/StringLiterals:
 
 Naming/PredicateName:
   ForbiddenPrefixes: ["is_"]
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/*.rb'
