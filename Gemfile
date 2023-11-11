@@ -13,3 +13,9 @@ end
 group :development do
   gem "rubocop", "~> 1.57"
 end
+
+gem "octokit", "~> 5.0"
+
+gem "netrc", "~> 0.11.0"
+
+gem "git", "~> 1.18"
