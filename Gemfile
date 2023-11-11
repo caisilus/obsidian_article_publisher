@@ -19,3 +19,5 @@ gem "octokit", "~> 5.0"
 gem "netrc", "~> 0.11.0"
 
 gem "git", "~> 1.18"
+
+gem "launchy", "~> 2.4", ">= 2.4.3"

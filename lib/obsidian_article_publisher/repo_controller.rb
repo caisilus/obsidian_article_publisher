@@ -2,6 +2,7 @@
 
 require "git"
 require "fileutils"
+require "launchy"
 
 module ObsidianArticlePublisher
   class RepoController
@@ -13,6 +14,11 @@ module ObsidianArticlePublisher
       @origin = @api.repo "#{owner}/#{repo_name}"
       setup_local(workdir: WORKDIR, repo_name:)
       sync_local_with_upstream
+    end
+
+    def open_pull_request
+      @local.push("origin", @default_branch)
+      Launchy.open(@origin_url)
     end
 
     def method_missing(name, *args, **kwargs)
@@ -30,7 +36,7 @@ module ObsidianArticlePublisher
     private
 
     def setup_local(workdir:, repo_name:)
-      puts @origin[:clone_url]
+      @origin_url = @origin[:clone_url]
       @local_dir_path = File.join(workdir, repo_name)
 
       FileUtils.rm_rf(@local_dir_path) if Dir.exist?(@local_dir_path)
@@ -44,10 +50,10 @@ module ObsidianArticlePublisher
     end
 
     def sync_local_with_upstream
-      default_branch = @origin[:default_branch]
+      @default_branch = @origin[:default_branch]
       @local.fetch("upstream")
-      @local.checkout(default_branch)
-      @local.merge("upstream/#{default_branch}")
+      @local.checkout(@default_branch)
+      @local.merge("upstream/#{@default_branch}")
     end
   end
 end

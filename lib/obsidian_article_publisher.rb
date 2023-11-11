@@ -37,6 +37,7 @@ module ObsidianArticlePublisher
       @repo_controller.add(all: true)
       prepare_editor(@repo_controller.local_dir_path, article_repo_path)
       @repo_controller.commit("Add article #{article_repo_path} with images in #{images_repo_dir}")
+      @repo_controller.open_pull_request
     end
 
     private
