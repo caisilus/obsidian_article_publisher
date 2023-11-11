@@ -24,7 +24,7 @@ module ObsidianArticlePublisher
       link = yield(link) if block_given?
       link = File.join(base_path, link) unless base_path.nil?
 
-      "![#{link}](#{link})"
+      "\n![#{link}](#{link})\n"
     end
   end
 end
