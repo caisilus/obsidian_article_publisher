@@ -8,7 +8,11 @@ This is a simple ruby script for publishing Obsidian documents as md document on
 
 # Setup
 
-1. Create `settings.json`
+1. Create `settings.yml` and fill it with your obsidian vault(change path below to your obsidian vault path):
+
+```yaml
+articles_folder: C:/documents/Obsidian vault
+```
 2. Run
 ```bash
 bundle install
