@@ -5,6 +5,8 @@ require "fileutils"
 
 module ObsidianArticlePublisher
   class RepoController
+    attr_reader :local_dir_path
+
     def initialize(owner:, repo_name:, api:)
       @api = api
 
@@ -15,9 +17,9 @@ module ObsidianArticlePublisher
 
     def setup_local(workdir:, repo_name:)
       puts @origin[:clone_url]
-      local_dir_path = File.join(workdir, repo_name)
+      @local_dir_path = File.join(workdir, repo_name)
 
-      FileUtils.rm_rf(local_dir_path) if Dir.exist?(local_dir_path)
+      FileUtils.rm_rf(@local_dir_path) if Dir.exist?(@local_dir_path)
 
       @local = Git.clone(@origin[:clone_url], repo_name, path: workdir)
 
