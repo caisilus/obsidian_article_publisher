@@ -5,7 +5,7 @@ require "fileutils"
 
 module ObsidianArticlePublisher
   class RepoController
-    attr_reader :local_dir_path
+    attr_reader :local_dir_path, :upstream_url
 
     def initialize(owner:, repo_name:, api:)
       @api = api
@@ -14,6 +14,20 @@ module ObsidianArticlePublisher
       setup_local(workdir: WORKDIR, repo_name:)
       sync_local_with_upstream
     end
+
+    def method_missing(name, *args, **kwargs)
+      return @local.send(name, *args, **kwargs) if @local.respond_to?(name)
+
+      super
+    end
+
+    def respond_to_missing?(name)
+      return true if @local.respond_to?(name)
+
+      super
+    end
+
+    private
 
     def setup_local(workdir:, repo_name:)
       puts @origin[:clone_url]
@@ -24,10 +38,9 @@ module ObsidianArticlePublisher
       @local = Git.clone(@origin[:clone_url], repo_name, path: workdir)
 
       upstream = @origin[:parent]
-      upstream_url = @api.repo(upstream[:full_name])[:clone_url]
-      puts upstream_url
+      @upstream_url = @api.repo(upstream[:full_name])[:clone_url]
 
-      @local.add_remote("upstream", upstream_url)
+      @local.add_remote("upstream", @upstream_url)
     end
 
     def sync_local_with_upstream

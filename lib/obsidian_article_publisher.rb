@@ -29,22 +29,28 @@ module ObsidianArticlePublisher
 
     public
 
-    def publish(old_name, article_repo_path:, images_repo_dir:)
+    def publish(article_old_name, article_repo_path:, images_repo_dir:)
+      add_converted_article(article_old_name, article_repo_path:, images_repo_dir:)
+      @link_converter.image_names.each do |image_name|
+        copy_image(image_name, image_destination_dir: images_repo_dir)
+      end
+      @repo_controller.add(all: true)
+      prepare_editor(@repo_controller.local_dir_path, article_repo_path)
+      @repo_controller.commit("Add article #{article_repo_path} with images in #{images_repo_dir}")
+    end
+
+    private
+
+    def add_converted_article(article_old_name, article_repo_path:, images_repo_dir:)
       image_links_base_path = get_relative_path(from: File.dirname(article_repo_path), to: images_repo_dir)
-      converted_article_content = @link_converter.convert_links(article_content(old_name),
+      converted_article_content = @link_converter.convert_links(article_content(article_old_name),
                                                                 base_path: image_links_base_path) do |img_name|
         @image_name_generator.generate(img_name)
       end
 
       output_article_filename = File.join(@repo_controller.local_dir_path, article_repo_path)
       File.write(output_article_filename, converted_article_content)
-
-      @link_converter.image_names.each do |image_name|
-        copy_image(image_name, image_destination_dir: images_repo_dir)
-      end
     end
-
-    private
 
     def get_relative_path(from:, to:)
       from_path = Pathname.new(from)
@@ -66,6 +72,27 @@ module ObsidianArticlePublisher
       image_destination = File.join(image_destination_dir, image_destination)
 
       FileUtils.cp(image_source, image_destination)
+    end
+
+    def prepare_editor(project_dir, article_path)
+      article_full_path = File.join(project_dir, article_path)
+
+      add_message_to_article(article_full_path, message_for_publisher)
+
+      system("code #{project_dir} -n -w #{article_full_path}")
+    end
+
+    def message_for_publisher
+      dividor = "#{'=' * 60}\n"
+      message = dividor
+      message += "WHEN YOU CLOSE THIS FILE, PULL REQUEST TO #{@repo_controller.upstream_url} WILL BE SENT.\n" \
+                "THESE LINES WON'T BE ADDED TO COMMIT\n"
+      "#{message}#{dividor}\n\n"
+    end
+
+    def add_message_to_article(article_full_path, message)
+      article_content = message + File.read(article_full_path)
+      File.write(article_full_path, article_content)
     end
   end
 end
