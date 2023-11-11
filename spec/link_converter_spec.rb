@@ -42,4 +42,13 @@ RSpec.describe ObsidianArticlePublisher::LinkConverter, "#convert_links" do
 
     expect(converter.image_names).to eq ["img.png", "img1.png"]
   end
+
+  it "uses block to get new filename for each image if block is given" do
+    text = "Hello!\nHere is link: ![[img.png]]\nCheck it out!"
+    base_path = "images/test"
+    converter = ObsidianArticlePublisher::LinkConverter.new
+    converted_text = converter.convert_links(text, base_path:, &:upcase)
+
+    expect(converted_text).to eq "Hello!\nHere is link: ![images/test/IMG.PNG](images/test/IMG.PNG)\nCheck it out!"
+  end
 end
